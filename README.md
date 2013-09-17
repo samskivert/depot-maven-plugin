@@ -25,6 +25,14 @@ To add this to your build, add the following to your `pom.xml`:
   </build>
 ```
 
+The plugin has to run after the `compile` phase because it operates on the compiled `*Record.class`
+files. The above configuration runs it during the `process-classes` phase (which immediately
+follows `compile`). Thus to trigger it, you need to invoke either `mvn package` (which includes the
+process-classes phase), or `mvn process-classes` directly (which is not a phase one normally runs
+on the command line).
+
+## Includes/Excludes
+
 By default, it searches your source directory for all files matching `*Record.java`. You can change
 this behavior like so:
 
@@ -45,12 +53,6 @@ this behavior like so:
           </execution>
         <!-- ... -->
 ```
-
-The plugin has to run after the `compile` phase because it operates on the compiled `*Record.class`
-files. The above configuration runs it during the `process-classes` phase (which immediately
-follows `compile`). Thus to trigger it, you need to invoke either `mvn package` (which includes the
-process-classes phase), or `mvn process-classes` directly (which is not a phase one normally runs
-on the command line).
 
 ## Discuss
 

@@ -46,6 +46,12 @@ this behavior like so:
         <!-- ... -->
 ```
 
+The plugin has to run after the `compile` phase because it operates on the compiled `*Record.class`
+files. The above configuration runs it during the `process-classes` phase (which immediately
+follows `compile`). Thus to trigger it, you need to invoke either `mvn package` (which includes the
+process-classes phase), or `mvn process-classes` directly (which is not a phase one normally runs
+on the command line).
+
 ## Discuss
 
 Questions and comments can be directed to the [OOO Google Group].

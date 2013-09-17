@@ -60,7 +60,7 @@ Questions and comments can be directed to the [OOO Google Group].
 
 ## License
 
-Nexus is released under the BSD License. See the [LICENSE] file for details.
+Depot Maven Plugin is released under the BSD License. See the [LICENSE] file for details.
 
 [Depot]: https://code.google.com/p/depot
 [OOO Google Group]: http://groups.google.com/group/ooo-libs

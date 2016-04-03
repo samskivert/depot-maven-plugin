@@ -59,19 +59,14 @@ this behavior like so:
 You can configure the number of spaces per indent level in the generated code like so:
 
 ```xml
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>com.samskivert</groupId>
-        <artifactId>depot-maven-plugin</artifactId>
-        <version>1.0.2</version>
-        ...
-        <configuration>
-          <indentWidth>2</indentWidth>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+        <!-- ... -->
+          <execution>
+            <!-- ... -->
+            <configuration>
+              <indentWidth>2</indentWidth>
+            </configuration>
+          </execution>
+        <!-- ... -->
 ```
 
 ## Discuss

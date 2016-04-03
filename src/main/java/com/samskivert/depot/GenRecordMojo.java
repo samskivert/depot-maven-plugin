@@ -16,6 +16,7 @@ import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 import org.apache.maven.artifact.DependencyResolutionRequiredException;
+import org.apache.maven.model.Build;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
@@ -37,11 +38,18 @@ public class GenRecordMojo extends AbstractMojo {
     @Parameter
     public List<String> excludes;
 
+    @Parameter(defaultValue="4")
+    public int indentWidth;
+
     public void execute () throws MojoExecutionException {
         // create the classloader we'll use to load FooRecord classes
+        Build build = _project.getBuild();
         List<URL> entries = Lists.newArrayList();
-        for (String entry : _compileClasspath) addEntry(entries, entry);
-        addEntry(entries, _project.getBuild().getOutputDirectory());
+        List<String> cp = processTests() ? _testClasspath : _compileClasspath;
+        addEntry(entries, build.getOutputDirectory());
+        if (processTests()) {
+            addEntry(entries, build.getTestOutputDirectory());
+        }
 
         ClassLoader cloader = URLClassLoader.newInstance(
             entries.toArray(new URL[entries.size()]),
@@ -60,18 +68,26 @@ public class GenRecordMojo extends AbstractMojo {
                 return new RuntimeException(msg, e);
             }
         };
+        genner.setIndentWidth(indentWidth);
 
         // now find all matching source files and (re)generate them
         try {
-            File sourceDir = new File(_project.getBuild().getSourceDirectory());
+            File sourceDir = new File(processTests() ? build.getTestSourceDirectory() :
+                                      build.getSourceDirectory());
             String includes = Joiner.on(",").join(this.includes);
-            String excludes = (this.excludes == null) ? null : Joiner.on(",").join(this.excludes);
+            String excludes = (this.excludes == null) ? null :
+                Joiner.on(",").join(this.excludes);
             List<?> files = FileUtils.getFiles(sourceDir, includes, excludes);
             for (Object fobj : files) genner.processRecord((File)fobj);
 
         } catch (IOException ioe) {
             throw new MojoExecutionException("Failed to resolve includes/excludes", ioe);
         }
+    }
+
+    // overridden by GenTestRecordMojo
+    protected boolean processTests () {
+        return false;
     }
 
     protected void addEntry (List<URL> entries, String entry) {
@@ -87,4 +103,7 @@ public class GenRecordMojo extends AbstractMojo {
 
     @Parameter(property="project.compileClasspathElements", required=true, readonly=true)
     private List<String> _compileClasspath;
+
+    @Parameter(property="project.testClasspathElements", required=true, readonly=true)
+    private List<String> _testClasspath;
 }

@@ -10,7 +10,7 @@ To add this to your build, add the following to your `pom.xml`:
       <plugin>
         <groupId>com.samskivert</groupId>
         <artifactId>depot-maven-plugin</artifactId>
-        <version>1.0</version>
+        <version>1.0.2</version>
         <executions>
           <execution>
             <id>genrecord</id>
@@ -52,6 +52,26 @@ this behavior like so:
             </configuration>
           </execution>
         <!-- ... -->
+```
+
+## Indent width
+
+You can configure the number of spaces per indent level in the generated code like so:
+
+```xml
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.samskivert</groupId>
+        <artifactId>depot-maven-plugin</artifactId>
+        <version>1.0.2</version>
+        ...
+        <configuration>
+          <indentWidth>2</indentWidth>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 ```
 
 ## Discuss

@@ -46,6 +46,7 @@ public class GenRecordMojo extends AbstractMojo {
         Build build = _project.getBuild();
         List<URL> entries = Lists.newArrayList();
         List<String> cp = processTests() ? _testClasspath : _compileClasspath;
+        for (String entry : cp) addEntry(entries, entry);
         addEntry(entries, build.getOutputDirectory());
         if (processTests()) {
             addEntry(entries, build.getTestOutputDirectory());
